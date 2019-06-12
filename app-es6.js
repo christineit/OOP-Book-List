@@ -59,6 +59,45 @@ class UI {
     }
 }
 
+// Local storage Class
+class Store {
+    // Fetch from local storage
+    static getBooks() {
+        let books;
+        if (localStorage.getItem('books') === null) {
+            books = [];
+        } else {
+            books = JSON.parse(localStorage.getItem('books'));
+
+        }
+        return books;
+    }
+    // Display books in UI
+    static displayBooks() {
+        const books = Store.getBooks();
+        books.forEach(function (book) {
+            const ui = new UI;
+
+            // Add book to UI
+            ui.addBookToList(book);
+        })
+    }
+    //Add to local storage
+    static addBooks(book) {
+        const books = Store.getBooks();
+        books.push(book);
+        localStorage.setItem('books', JSON.stringify(books))
+    }
+    // Remove from local storage
+    static removeBook() {
+
+    }
+}
+// DOM Load Event
+document.addEventListener('DOMContentLoaded', Store.displayBooks);
+
+
+
 // Event Listener for add book
 document.getElementById('book-form').addEventListener('submit', function (e) {
     // console.log('test');
@@ -84,6 +123,9 @@ document.getElementById('book-form').addEventListener('submit', function (e) {
     } else {
         // Add book to list
         ui.addBookToList(book);
+
+        // Add to local storage
+        Store.addBooks(book);
 
         // Show successful add message
         ui.showAlert('Book added!', 'success')

@@ -1,14 +1,11 @@
+// ES5 App
+
 // Book Constructor
 function Book(title, author, isbn) {
     this.title = title;
     this.author = author;
     this.isbn = isbn;
-
 }
-
-
-let submitBtn = document.querySelector('submit');
-console.log('Clicked!!!');
 
 
 // UI Constructor
@@ -30,7 +27,6 @@ UI.prototype.addBookToList = function (book) {
                 `;
 
     list.appendChild(row);
-
 
 }
 // Show Alert
@@ -54,6 +50,12 @@ UI.prototype.showAlert = function (message, className) {
     }, 3000);
 }
 
+// Delete book
+UI.prototype.deleteBook = function (target) {
+    if (target.className === 'delete') {
+        target.parentElement.parentElement.remove(); // b/c want to go up to delete <tr>
+    }
+}
 
 // Clear fields
 UI.prototype.clearFields = function () {
@@ -63,7 +65,9 @@ UI.prototype.clearFields = function () {
 }
 
 
-// Event Listeners
+
+
+// Event Listener for add book
 document.getElementById('book-form').addEventListener('submit', function (e) {
     // console.log('test');
     // Get form values
@@ -78,7 +82,7 @@ document.getElementById('book-form').addEventListener('submit', function (e) {
 
     // Instantiate a UI Object
     const ui = new UI();
-    // console.log(ui);
+    console.log(ui);
 
     // Validate
     if (title === '' || author === '' || isbn === '') {
@@ -89,15 +93,28 @@ document.getElementById('book-form').addEventListener('submit', function (e) {
         // Add book to list
         ui.addBookToList(book);
 
-        // Show succesful add
+        // Show successful add message
         ui.showAlert('Book added!', 'success')
 
         // Clear fields
         ui.clearFields();
     }
 
-
-
     e.preventDefault();
 
+});
+
+// Event Listener for delete
+document.getElementById('book-list').addEventListener('click', function (e) {
+
+    // console.log('test');
+    const ui = new UI();
+
+    // Delete book 
+    ui.deleteBook(e.target);
+
+    //Show message
+    ui.showAlert('Book deleted', 'success');
+
+    e.preventDefault();
 })

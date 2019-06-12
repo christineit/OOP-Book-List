@@ -43,7 +43,7 @@ class UI {
         //Timeout after 3 seconds
         setTimeout(function () {
             document.querySelector('.alert').remove();
-        }, 3000);
+        }, 1000);
     }
 
     deleteBook(target) {
@@ -80,17 +80,26 @@ class Store {
 
             // Add book to UI
             ui.addBookToList(book);
-        })
+        });
     }
     //Add to local storage
-    static addBooks(book) {
+    static addBook(book) {
         const books = Store.getBooks();
         books.push(book);
         localStorage.setItem('books', JSON.stringify(books))
     }
     // Remove from local storage
-    static removeBook() {
+    static removeBook(isbn) {
+        // console.log(isbn);
+        const books = Store.getBooks();
 
+        books.forEach(function (book, index) {
+            if (book.isbn === isbn) {
+                books.splice(index, 1);
+            }
+        });
+
+        localStorage.setItem('books', JSON.stringify(books));
     }
 }
 // DOM Load Event
@@ -125,7 +134,7 @@ document.getElementById('book-form').addEventListener('submit', function (e) {
         ui.addBookToList(book);
 
         // Add to local storage
-        Store.addBooks(book);
+        Store.addBook(book);
 
         // Show successful add message
         ui.showAlert('Book added!', 'success')
@@ -146,6 +155,9 @@ document.getElementById('book-list').addEventListener('click', function (e) {
 
     // Delete book 
     ui.deleteBook(e.target);
+
+    // Remove from localStorage
+    Store.removeBook(e.target.parentElement.previousElementSibling.textContent);
 
     //Show message
     ui.showAlert('Book deleted', 'success');

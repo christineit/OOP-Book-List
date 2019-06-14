@@ -80,9 +80,24 @@ document.getElementById('book-form').addEventListener('submit', function (e) {
     const book = new Book(title, author, isbn);
     // console.log(book);
 
+    let books;
+
+    if (localStorage.getItem('books') === null) {
+        books = []
+    } else {
+        books = JSON.parse(localStorage.getItem('books'));
+    }
+    books.push(book);
+
+    localStorage.setItem('books', JSON.stringify(books));
+    console.log(books);
+
+
+
     // Instantiate a UI Object
     const ui = new UI();
-    console.log(ui);
+    // console.log(ui);
+
 
     // Validate
     if (title === '' || author === '' || isbn === '') {
@@ -98,6 +113,7 @@ document.getElementById('book-form').addEventListener('submit', function (e) {
 
         // Clear fields
         ui.clearFields();
+
     }
 
     e.preventDefault();

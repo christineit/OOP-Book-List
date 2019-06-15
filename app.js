@@ -11,6 +11,32 @@ function Book(title, author, isbn) {
 // UI Constructor
 function UI() { }
 
+
+// Pulling tasks from localStorage to UI w/ event listener 
+document.addEventListener('DOMContentLoaded', function (e) {
+    let books;
+    if (localStorage.getItem('books') === null) {
+        books = []
+    } else {
+        books = JSON.parse(localStorage.getItem('books'));
+    }
+    // const books = JSON.parse(localStorage.getItem('books'));
+    books.forEach(function (book) {
+        console.log(book);
+        const list = document.getElementById('book-list');
+        const row = document.createElement('tr');
+        row.innerHTML = `
+        <td>${book.title}</td >
+        <td>${book.author}</td >
+        <td>${book.isbn}</td >
+        <td><a href="#" class="delete">X</td >`;
+
+        list.appendChild(row);
+
+    });
+    e.preventDefault;
+});
+
 // Add book to list
 UI.prototype.addBookToList = function (book) {
     // console.log(book);
@@ -27,8 +53,9 @@ UI.prototype.addBookToList = function (book) {
                 `;
 
     list.appendChild(row);
-
 }
+
+
 // Show Alert
 UI.prototype.showAlert = function (message, className) {
     // Create div
@@ -66,7 +93,6 @@ UI.prototype.clearFields = function () {
 
 
 
-
 // Event Listener for add book
 document.getElementById('book-form').addEventListener('submit', function (e) {
     // console.log('test');
@@ -80,6 +106,7 @@ document.getElementById('book-form').addEventListener('submit', function (e) {
     const book = new Book(title, author, isbn);
     // console.log(book);
 
+    //New variable to store book added to localStorage
     let books;
 
     if (localStorage.getItem('books') === null) {
@@ -90,14 +117,11 @@ document.getElementById('book-form').addEventListener('submit', function (e) {
     books.push(book);
 
     localStorage.setItem('books', JSON.stringify(books));
-    console.log(books);
-
-
+    // console.log(books);
 
     // Instantiate a UI Object
     const ui = new UI();
     // console.log(ui);
-
 
     // Validate
     if (title === '' || author === '' || isbn === '') {
@@ -119,6 +143,8 @@ document.getElementById('book-form').addEventListener('submit', function (e) {
     e.preventDefault();
 
 });
+
+
 
 // Event Listener for delete
 document.getElementById('book-list').addEventListener('click', function (e) {
